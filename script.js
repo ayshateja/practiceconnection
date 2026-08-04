@@ -62,8 +62,14 @@ const CARD_CATEGORY_KEYS = ["anchor","see-clearly","move-toward","share-yourself
 function drawCard(catKey){
   const key = catKey || CARD_CATEGORY_KEYS[Math.floor(Math.random() * CARD_CATEGORY_KEYS.length)];
   const cards = CARDS[key];
-  const idx = Math.floor(Math.random() * cards.length);
+  let idx = Math.floor(Math.random() * cards.length);
+  const current = location.hash.match(/^#\/category\/([^/]+)\/(\d+)$/);
+  if(current && current[1] === key && cards.length > 1){
+    const currentIdx = Number(current[2]);
+    while(idx === currentIdx) idx = Math.floor(Math.random() * cards.length);
+  }
   const newHash = `#/category/${key}/${idx}`;
+  try{ sessionStorage.setItem('pc_random_draw', newHash); }catch(e){}
   if(location.hash === newHash){
     router();
   } else {
@@ -173,6 +179,7 @@ function renderCard(catKey, index){
 
     <div class="card-stage">
       <div class="card" style="background:${cat.bg}">
+        <div class="card-kicker">${esc(cat.name)} &middot; ${index + 1} of ${cards.length}</div>
         <h2 class="card-title">${esc(card.title)}</h2>
         <div class="card-body">
           ${card.paragraphs.map(p => `<p>${p}</p>`).join('')}
@@ -183,15 +190,59 @@ function renderCard(catKey, index){
           <div class="card-star" aria-hidden="true">&#10022;</div>
           <p class="card-question">${card.question}</p>
         ` : ''}
+        <div class="card-actions">
+          <button type="button" class="btn btn-share" id="share-card-btn">Share this card</button>
+          <button type="button" class="btn btn-draw-again" id="draw-again-btn" hidden>Draw another</button>
+        </div>
+        <div class="pc-card-logo" aria-label="Practice Connection">
+          <strong>Practice</strong>
+          <span>Connection</span>
+        </div>
       </div>
     </div>
 
-    <div class="card-nav">
-      <a class="btn" href="#/category/${catKey}/${index-1}" ${index<=0?'disabled':''}>&larr; Previous</a>
-      <a class="btn" href="#/category/${catKey}">All ${esc(cat.name)} cards</a>
-      <a class="btn" href="#/category/${catKey}/${index+1}" ${index>=cards.length-1?'disabled':''}>Next &rarr;</a>
+    <div class="card-nav" aria-label="Card navigation">
+      <a class="btn nav-prev" aria-label="Previous card" href="#/category/${catKey}/${index-1}" ${index<=0?'disabled':''}>&larr;<span class="nav-label"> Previous</span></a>
+      <a class="btn nav-all" href="#/category/${catKey}"><span class="nav-all-long">All ${esc(cat.name)} cards</span><span class="nav-all-short">All cards</span></a>
+      <a class="btn nav-next" aria-label="Next card" href="#/category/${catKey}/${index+1}" ${index>=cards.length-1?'disabled':''}><span class="nav-label">Next </span>&rarr;</a>
     </div>
   `;
+
+  const shareBtn = document.getElementById('share-card-btn');
+  shareBtn.addEventListener('click', () => shareCard(card, catKey, index, shareBtn));
+
+  const drawAgainBtn = document.getElementById('draw-again-btn');
+  try{
+    if(sessionStorage.getItem('pc_random_draw') === location.hash){
+      drawAgainBtn.hidden = false;
+    }
+  }catch(e){}
+  drawAgainBtn.addEventListener('click', () => drawCard());
+}
+
+
+async function shareCard(card, catKey, index, button){
+  const url = `${location.origin}${location.pathname}#/category/${catKey}/${index}`;
+  const data = {
+    title: `${card.title} — Practice Connection`,
+    text: 'A Practice Connection card I thought you might appreciate.',
+    url
+  };
+
+  try{
+    if(navigator.share){
+      await navigator.share(data);
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    const original = button.textContent;
+    button.textContent = 'Link copied';
+    setTimeout(() => { button.textContent = original; }, 1600);
+  }catch(error){
+    if(error && error.name !== 'AbortError'){
+      window.prompt('Copy this card link:', url);
+    }
+  }
 }
 
 /* ---------- JOURNAL: TOC ---------- */
@@ -280,6 +331,10 @@ function renderJournalPage(idx){
     <div class="card-stage">
       <div class="journal-page">
         ${body}
+        <div class="pc-card-logo pc-journal-logo" aria-label="Practice Connection">
+          <strong>Practice</strong>
+          <span>Connection</span>
+        </div>
       </div>
     </div>
     <div class="card-nav">
