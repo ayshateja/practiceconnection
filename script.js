@@ -10,14 +10,11 @@ function esc(s){
 
 function topbar(){
   return `
-    <div class="topbar">
-      <a class="brand" href="#/">
+    <div class="topbar topbar-simple">
+      <a class="brand" href="#/" aria-label="Return to Practice Connection home">
         <span class="brand-mark" aria-hidden="true"></span>
         Practice Connection
       </a>
-      <div class="nav-actions">
-        <a class="btn btn-ghost" href="#/">Menu</a>
-      </div>
     </div>
   `;
 }
@@ -83,22 +80,10 @@ function renderHome(){
   const order = ["anchor","see-clearly","move-toward","share-yourself","stay-connected","journal"];
 
   app.innerHTML = `
-    <div class="topbar topbar-home">
-      <div class="topbar-left">
-        <button type="button" class="btn-draw-small" id="draw-any-btn">Draw a card for me</button>
-      </div>
-      <a class="brand" href="#/">
-        <span class="brand-mark" aria-hidden="true"></span>
-        Practice Connection
-      </a>
-      <div class="nav-actions"></div>
-    </div>
-
-    <div class="hero">
+    <div class="hero home-hero">
       <p class="eyebrow">A digital companion</p>
       <h1>Practice Connection<br><em>Card Deck</em></h1>
       <p class="lede">Small experiments in relating differently.</p>
-      <p class="lede">Select a capacity and card that resonates. There&rsquo;s no wrong place to start.</p>
     </div>
 
     <div class="deck" role="list" aria-label="Card categories">
@@ -108,11 +93,18 @@ function renderHome(){
         return `
         <a class="deck-tile" role="listitem" href="#/category/${key}" style="background:${c.tile}; color:${c.ink}">
           <span class="tile-index">${count} ${key === 'journal' ? 'pages' : 'cards'}</span>
-          <span class="tile-name">${esc(c.name)}</span>
+          <span class="tile-copy">
+            <span class="tile-name">${esc(c.name)}</span>
+            <span class="tile-description">${esc(c.tagline)}</span>
+          </span>
         </a>`;
       }).join('')}
     </div>
-    <p class="hero-hint" style="text-align:center">Tap a category to see its cards.</p>
+
+    <p class="hero-hint">Swipe to explore. Tap to select.</p>
+    <div class="home-draw">
+      <button type="button" class="btn-draw-small" id="draw-any-btn">Draw a card for me</button>
+    </div>
 
     <p class="safety-note">Practice Connection is a self-guided practice, not therapy or crisis support. You can stop or pause at any time.</p>
 
@@ -190,10 +182,6 @@ function renderCard(catKey, index){
           <div class="card-star" aria-hidden="true">&#10022;</div>
           <p class="card-question">${card.question}</p>
         ` : ''}
-        <div class="card-actions">
-          <button type="button" class="btn btn-share" id="share-card-btn">Share this card</button>
-          <button type="button" class="btn btn-draw-again" id="draw-again-btn" hidden>Draw another</button>
-        </div>
         <div class="pc-card-logo" aria-label="Practice Connection">
           <strong>Practice</strong>
           <span>Connection</span>
@@ -206,18 +194,13 @@ function renderCard(catKey, index){
       <a class="btn nav-all" href="#/category/${catKey}"><span class="nav-all-long">All ${esc(cat.name)} cards</span><span class="nav-all-short">All cards</span></a>
       <a class="btn nav-next" aria-label="Next card" href="#/category/${catKey}/${index+1}" ${index>=cards.length-1?'disabled':''}><span class="nav-label">Next </span>&rarr;</a>
     </div>
+    <div class="share-row">
+      <button type="button" class="btn btn-share" id="share-card-btn">Share this card</button>
+    </div>
   `;
 
   const shareBtn = document.getElementById('share-card-btn');
   shareBtn.addEventListener('click', () => shareCard(card, catKey, index, shareBtn));
-
-  const drawAgainBtn = document.getElementById('draw-again-btn');
-  try{
-    if(sessionStorage.getItem('pc_random_draw') === location.hash){
-      drawAgainBtn.hidden = false;
-    }
-  }catch(e){}
-  drawAgainBtn.addEventListener('click', () => drawCard());
 }
 
 

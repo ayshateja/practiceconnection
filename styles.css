@@ -836,3 +836,164 @@ button{ font-family:inherit; }
 
   .toc-card .toc-title{ font-size:.78rem; }
 }
+
+
+/* ===========================================================
+   Version 3 — home fan and navigation refinements
+   =========================================================== */
+
+/* The home page begins directly with the hero. */
+.home-hero{
+  padding-top:3.5rem;
+}
+
+/* Interior pages need only the linked brand; it already returns home. */
+.topbar-simple{
+  justify-content:flex-start;
+}
+
+.tile-copy{
+  display:flex;
+  flex-direction:column;
+  gap:.55rem;
+}
+
+.deck-tile .tile-description{
+  display:block;
+  font-size:.72rem;
+  line-height:1.35;
+  font-weight:400;
+  opacity:.82;
+}
+
+.hero-hint{
+  margin:.4rem auto 0;
+  text-align:center;
+}
+
+.home-draw{
+  display:flex;
+  justify-content:center;
+  margin:1rem 0 2.1rem;
+}
+
+.home-draw .btn-draw-small{
+  min-height:46px;
+  padding:.72rem 1.35rem;
+}
+
+/* Keep the wordmark in title case regardless of surrounding styles. */
+.pc-card-logo,
+.pc-card-logo strong,
+.pc-card-logo span{
+  text-transform:none !important;
+  letter-spacing:-.02em;
+}
+
+/* Sharing is an action on the page, not content printed on the card. */
+.share-row{
+  display:flex;
+  justify-content:center;
+  margin:.85rem auto 0;
+  max-width:460px;
+}
+
+.share-row .btn-share{
+  min-height:44px;
+}
+
+@media (max-width:760px){
+  .home-hero{
+    padding-top:2.2rem;
+    padding-bottom:.4rem;
+  }
+
+  /* A horizontal, swipeable fan preserves the deck metaphor on phones. */
+  .deck{
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    gap:0;
+    height:360px;
+    margin:1.4rem calc(-6vw) .35rem;
+    padding:1.25rem 14vw 1.6rem;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:14vw;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+
+  .deck::-webkit-scrollbar{ display:none; }
+
+  .deck-tile,
+  .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
+  .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
+    flex:0 0 min(70vw,250px);
+    width:min(70vw,250px);
+    height:330px;
+    margin:0 -13px 0 0;
+    padding:1.3rem 1.15rem;
+    scroll-snap-align:center;
+    transform-origin:center bottom;
+  }
+
+  .deck-tile:nth-child(odd){ transform:rotate(-2.5deg) !important; }
+  .deck-tile:nth-child(even){ transform:rotate(2.5deg) !important; }
+  .deck-tile:first-child{ margin-left:0; }
+  .deck-tile:last-child{ margin-right:14vw; }
+
+  .deck-tile:hover,
+  .deck-tile:focus-visible{
+    transform:translateY(-5px) rotate(0) !important;
+  }
+
+  .deck-tile .tile-name{
+    font-size:1.25rem;
+  }
+
+  .deck-tile .tile-description{
+    font-size:.83rem;
+    line-height:1.4;
+  }
+
+  .hero-hint{
+    margin-top:.2rem;
+  }
+
+  .home-draw{
+    margin:.9rem 0 1.9rem;
+  }
+
+  .home-draw .btn-draw-small{
+    width:100%;
+    max-width:360px;
+    min-height:48px;
+  }
+
+  .share-row{
+    margin-top:.75rem;
+    padding-bottom:calc(.25rem + env(safe-area-inset-bottom));
+  }
+
+  .share-row .btn-share{
+    width:100%;
+  }
+}
+
+@media (max-width:420px){
+  .deck{
+    height:340px;
+    padding-inline:12vw;
+    scroll-padding-inline:12vw;
+  }
+
+  .deck-tile,
+  .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
+  .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
+    flex-basis:76vw;
+    width:76vw;
+    height:310px;
+  }
+}

@@ -5,7 +5,7 @@
 const CATEGORIES = {
   "anchor": {
     name: "Anchor",
-    tagline: "Ground yourself",
+    tagline: "Grounded presence",
     tile: "#E9FF70",
     bg: "#F9FFE6",
     ink: "#232C18"
@@ -40,7 +40,7 @@ const CATEGORIES = {
   },
   "journal": {
     name: "Journal",
-    tagline: "Clarify what you want, notice your patterns, and reflect on your practice.",
+    tagline: "Clarify what you want, notice your patterns and reflect on your practice.",
     tile: "#008000",
     bg: "#F2FAF3",
     ink: "#FFFFFF"
