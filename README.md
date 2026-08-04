@@ -9,6 +9,20 @@ companion journal. Pure HTML/CSS/JS — no dependencies to install.
 - `styles.css` — all styling
 - `data.js` — every card and journal page's content, in one place (edit here to change text)
 - `script.js` — routing + rendering logic
+- `favicon.ico`, `favicon-16.png`, `favicon-32.png`, `apple-touch-icon.png` — browser tab icon
+- `og-image.png` — the image shown when this link is shared in Slack, email, LinkedIn, iMessage, etc.
+- `icon-512.png` — a larger version of the icon, kept in case you want it later (e.g. for a home-screen icon)
+
+## If your URL ever changes
+
+`index.html` has two lines with the full site URL hard-coded (needed for link previews to work):
+
+```html
+<meta property="og:image" content="https://ayshateja.github.io/practiceconnection/og-image.png">
+<meta property="og:url" content="https://ayshateja.github.io/practiceconnection/">
+```
+
+If you rename the repo, move to `ayshateja.github.io`, or connect a custom domain, update both lines to match — otherwise shared links will keep pointing at the old address for their preview image.
 
 ## Preview locally
 

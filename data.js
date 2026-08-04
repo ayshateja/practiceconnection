@@ -108,6 +108,15 @@ const CARDS = {
       question: "What's one small step you can take toward the connection you need right now?"
     },
     {
+      title: "Notice What Is Already Here",
+      paragraphs: [
+        "When you're feeling unseen or alone, pause.",
+        "Look for three small signs that someone has reached toward you recently. Let yourself notice each one before moving on."
+      ],
+      quote: "Sometimes we look for what isn't there instead of noticing what is.",
+      question: "What changed when you looked for connection instead of its absence?"
+    },
+    {
       title: "Meet Yourself Here",
       paragraphs: [
         "Notice when you start beating yourself up after falling into an old pattern. Pause. Speak to yourself the way you would to someone you love."
@@ -157,6 +166,23 @@ const CARDS = {
       ],
       quote: "You already know what &ldquo;no&rdquo; looks like.",
       question: "What happened that wouldn't have happened if you stayed home?"
+    },
+    {
+      title: "Extend an Invite",
+      paragraphs: [
+        "Invite someone to spend time together. Text: &ldquo;<em>Planning on checking out [thing] next week, want to come?</em>&rdquo;"
+      ],
+      quote: "Your invitations are a gift, not a burden.",
+      question: "What surprised you about being the one to initiate?"
+    },
+    {
+      title: "Flip the Script",
+      paragraphs: [
+        "When someone says no or doesn't reply, notice the story you default to and where it lives in your body.",
+        "Then, consider a kinder explanation that's consistent with who they usually are."
+      ],
+      quote: "A no or silence isn't always about you. Most people are just juggling life.",
+      question: "What changed in your mood and body?"
     },
     {
       title: "Keep the Thread Alive",
@@ -262,6 +288,14 @@ const CARDS = {
       ],
       quote: "You don't have to solve anything to be helpful. Your presence is enough.",
       question: "What happened when you stayed instead of trying to solve?"
+    },
+    {
+      title: "Take a Beat",
+      paragraphs: [
+        "When you feel irritation, defensiveness, or heat in your chest, pause. Take one breath before you speak."
+      ],
+      quote: "You can't always choose what you feel. You can choose what you do next.",
+      question: "What did one breath make possible?"
     },
     {
       title: "Hold Two Views",

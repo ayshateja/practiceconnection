@@ -8,7 +8,7 @@ function esc(s){
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-function topbar(showBack, backHref, backLabel){
+function topbar(){
   return `
     <div class="topbar">
       <a class="brand" href="#/">
@@ -16,7 +16,6 @@ function topbar(showBack, backHref, backLabel){
         Practice Connection
       </a>
       <div class="nav-actions">
-        ${showBack ? `<a class="btn" href="${backHref}">&larr; ${esc(backLabel)}</a>` : ''}
         <a class="btn btn-ghost" href="#/">Menu</a>
       </div>
     </div>
@@ -31,6 +30,8 @@ function router(){
 
   if(parts.length === 0){
     renderHome();
+  } else if(parts[0] === 'about'){
+    renderAbout();
   } else if(parts[0] === 'category' && parts[1] && CATEGORIES[parts[1]]){
     if(parts[1] === 'journal'){
       if(parts[2] !== undefined){
@@ -90,7 +91,8 @@ function renderHome(){
     <div class="hero">
       <p class="eyebrow">A digital companion</p>
       <h1>Practice Connection<br><em>Card Deck</em></h1>
-      <p class="lede">Small experiments in relating differently. Select a capacity and card that resonates. There&rsquo;s no wrong place to start.</p>
+      <p class="lede">Small experiments in relating differently.</p>
+      <p class="lede">Select a capacity and card that resonates. There&rsquo;s no wrong place to start.</p>
     </div>
 
     <div class="deck" role="list" aria-label="Card categories">
@@ -108,26 +110,40 @@ function renderHome(){
 
     <p class="safety-note">Practice Connection is a self-guided practice, not therapy or crisis support. You can stop or pause at any time.</p>
 
-    <p class="site-footer">Designed by Aysha Teja</p>
+    <div class="site-footer-row">
+      <span class="footer-credit">Designed by Aysha Teja</span>
+      <a class="footer-about" href="#/about">About</a>
+    </div>
   `;
 
   document.getElementById('draw-any-btn').addEventListener('click', () => drawCard());
 }
 
-/* ---------- TABLE OF CONTENTS ---------- */
+/* ---------- ABOUT ---------- */
 
-function stripHtml(html){
-  const d = document.createElement('div');
-  d.innerHTML = html;
-  return d.textContent || '';
+function renderAbout(){
+  app.innerHTML = `
+    ${topbar()}
+    <div class="card-stage">
+      <div class="journal-page about-page">
+        <div class="jp-kicker">About</div>
+        <h2>Hi, I&rsquo;m Aysha.</h2>
+        <p>I&rsquo;ve struggled with building meaningful relationships for much of my life. For a long time, I thought I was doing all the &ldquo;right&rdquo; things; I was kind and a good listener. What I couldn&rsquo;t see was how often I withdrew, expected rejection before it happened, hid behind work, or kept parts of myself hidden. Even though I longed for connection, those ways of relating kept people at a distance. It took me years to realize that if I wanted different relationships, I&rsquo;d have to practice relating differently.</p>
+        <p>Most of us spend years learning how to succeed at school or work, but very few of us are taught how to build close relationships. Like any other skill, connection can be learned and practiced. It&rsquo;s built through hundreds of everyday moments where we choose curiosity over certainty, courage over protection, and practice over perfection.</p>
+        <p>I hope these cards help you take small, courageous steps toward the relationships you long for.</p>
+      </div>
+    </div>
+  `;
 }
+
+/* ---------- TABLE OF CONTENTS ---------- */
 
 function renderTOC(catKey){
   const cat = CATEGORIES[catKey];
   const cards = CARDS[catKey];
 
   app.innerHTML = `
-    ${topbar(true, '#/', 'Menu')}
+    ${topbar()}
     <div class="section-head">
       <div class="section-chip" style="background:${cat.tile}"></div>
       <h1>${esc(cat.name)}</h1>
@@ -136,7 +152,7 @@ function renderTOC(catKey){
 
     <div class="toc-grid">
       ${cards.map((card,i) => `
-        <a class="toc-card" href="#/category/${catKey}/${i}" style="background:${cat.bg}">
+        <a class="toc-card" href="#/category/${catKey}/${i}" style="background:${cat.tile}; color:${cat.ink}">
           <div class="toc-title">${esc(card.title)}</div>
         </a>
       `).join('')}
@@ -153,7 +169,7 @@ function renderCard(catKey, index){
   const card = cards[index];
 
   app.innerHTML = `
-    ${topbar(true, `#/category/${catKey}`, cat.name + ' contents')}
+    ${topbar()}
 
     <div class="card-stage">
       <div class="card" style="background:${cat.bg}">
@@ -167,7 +183,6 @@ function renderCard(catKey, index){
           <div class="card-star" aria-hidden="true">&#10022;</div>
           <p class="card-question">${card.question}</p>
         ` : ''}
-        <div class="card-footer"><span>${esc(cat.name)}</span></div>
       </div>
     </div>
 
@@ -185,7 +200,7 @@ function renderJournalTOC(){
   const cat = CATEGORIES['journal'];
 
   app.innerHTML = `
-    ${topbar(true, '#/', 'Menu')}
+    ${topbar()}
     <div class="section-head">
       <div class="section-chip" style="background:${cat.tile}"></div>
       <h1>${esc(cat.name)}</h1>
@@ -194,24 +209,12 @@ function renderJournalTOC(){
 
     <div class="toc-grid">
       ${JOURNAL_PAGES.map((p) => `
-        <a class="toc-card" href="#/category/journal/${p.id}" style="background:${cat.bg}">
-          <span class="toc-num">${journalKindLabel(p)}</span>
-          <div>
-            <div class="toc-title">${esc(p.title)}${p.index ? ' ' + p.index : ''}</div>
-          </div>
+        <a class="toc-card" href="#/category/journal/${p.id}" style="background:${cat.tile}; color:${cat.ink}">
+          <div class="toc-title">${esc(p.title)}${p.index ? ' ' + p.index : ''}</div>
         </a>
       `).join('')}
     </div>
   `;
-}
-
-function journalKindLabel(p){
-  const labels = {
-    welcome: 'Start here', visualization: 'Reflection', longing: 'Reflection',
-    notice: 'Notice practice', reflect: 'Reflection', practice: 'Weekly practice',
-    celebrate: 'Reflection', words: 'Reference'
-  };
-  return labels[p.kind] || 'Journal';
 }
 
 /* ---------- JOURNAL: storage ---------- */
@@ -273,7 +276,7 @@ function renderJournalPage(idx){
   }
 
   app.innerHTML = `
-    ${topbar(true, '#/category/journal', 'Journal contents')}
+    ${topbar()}
     <div class="card-stage">
       <div class="journal-page">
         ${body}
