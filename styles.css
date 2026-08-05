@@ -270,35 +270,6 @@ button{ font-family:inherit; }
   .topbar-home .nav-actions{ justify-self:center; }
 }
 
-/* responsive fan: below the breakpoint the fan settles into an upright grid */
-
-@media (max-width: 760px){
-  .deck{
-    display:grid;
-    grid-template-columns: repeat(2, 1fr);
-    height:auto;
-    gap: .85rem;
-    margin: 2.4rem 0 1rem;
-  }
-  .deck-tile,
-  .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
-  .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
-    transform: none !important;
-    margin: 0;
-    width: auto;
-    height: 148px;
-    z-index: auto;
-  }
-  .deck-tile:hover, .deck-tile:focus-visible{
-    transform: translateY(-4px) !important;
-  }
-}
-
-@media (max-width: 420px){
-  .deck{ grid-template-columns: 1fr; }
-  .deck-tile{ height: 118px; }
-}
-
 /* ---------- section headers (TOC pages) ---------- */
 
 .section-head{
@@ -734,22 +705,6 @@ button{ font-family:inherit; }
     line-height:1.5;
   }
 
-  .deck{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap:.7rem;
-    margin-top:1.8rem;
-  }
-
-  .deck-tile,
-  .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
-  .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
-    height:128px;
-    padding:.9rem .8rem;
-  }
-
-  .deck-tile .tile-name{ font-size:1rem; }
-  .deck-tile .tile-index{ font-size:.6rem; }
-
   .section-head{
     margin-top:1.5rem;
     gap:.75rem;
@@ -828,12 +783,6 @@ button{ font-family:inherit; }
 }
 
 @media (max-width: 360px){
-  .deck-tile,
-  .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
-  .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
-    height:116px;
-  }
-
   .toc-card .toc-title{ font-size:.78rem; }
 }
 

@@ -18,11 +18,11 @@ companion journal. Pure HTML/CSS/JS — no dependencies to install.
 `index.html` has two lines with the full site URL hard-coded (needed for link previews to work):
 
 ```html
-<meta property="og:image" content="https://ayshateja.github.io/practiceconnection/og-image.png">
-<meta property="og:url" content="https://ayshateja.github.io/practiceconnection/">
+<meta property="og:image" content="https://practiceconnectioncards.com/og-image.png">
+<meta property="og:url" content="https://practiceconnectioncards.com/">
 ```
 
-If you rename the repo, move to `ayshateja.github.io`, or connect a custom domain, update both lines to match — otherwise shared links will keep pointing at the old address for their preview image.
+The site is currently live at **https://practiceconnectioncards.com** (custom domain via Cloudflare, pointed at the `ayshateja.github.io/practiceconnection` GitHub Pages repo). If you ever change domains again, update both lines above to match — otherwise shared links will keep pointing at the old address for their preview image.
 
 ## Preview locally
 
