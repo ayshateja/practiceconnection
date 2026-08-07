@@ -106,15 +106,57 @@ function renderHome(){
       <button type="button" class="btn-draw-small" id="draw-any-btn">Draw a card for me</button>
     </div>
 
-    <p class="safety-note">Practice Connection is a self-guided practice, not therapy or crisis support. You can stop or pause at any time.</p>
+    <p class="safety-note">Practice Connection is a self-guided practice, not therapy or crisis support. You can stop or pause at any time. If you need immediate support, contact a crisis line or someone you trust.</p>
 
     <div class="site-footer-row">
-      <span class="footer-credit">Designed by Aysha Teja</span>
-      <a class="footer-about" href="#/about">About</a>
+      <a class="footer-link" href="#/about">About</a>
+      <a class="footer-link" href="mailto:hello@practiceconnectioncards.com">Contact</a>
     </div>
   `;
 
   document.getElementById('draw-any-btn').addEventListener('click', () => drawCard());
+  initDeckStack();
+}
+
+/* On phones, the deck is a heavily-overlapping stack (see CSS): cards sit
+   almost entirely on top of each other and you swipe through them. This
+   keeps whichever card is centered visually "on top" — scaled up, fully
+   opaque, highest z-index — while the rest recede behind it, so the stack
+   reads correctly no matter which direction you've swiped. Desktop uses a
+   separate hover-driven fan (pure CSS) and is left untouched. */
+function initDeckStack(){
+  const deck = document.querySelector('.deck');
+  if(!deck) return;
+  if(!window.matchMedia('(max-width: 760px)').matches) return;
+
+  const tiles = Array.from(deck.querySelectorAll('.deck-tile'));
+  let ticking = false;
+
+  function update(){
+    const deckRect = deck.getBoundingClientRect();
+    const center = deckRect.left + deckRect.width / 2;
+    tiles.forEach((tile, i) => {
+      const r = tile.getBoundingClientRect();
+      const tileCenter = r.left + r.width / 2;
+      const dist = Math.abs(tileCenter - center);
+      const norm = Math.min(dist / (deckRect.width / 2 || 1), 1); // 0 = centered, 1 = far
+      const scale = 1 - norm * 0.13;
+      const opacity = 1 - norm * 0.4;
+      const rot = (i % 2 === 0 ? -1 : 1) * (1.5 + norm * 3.5);
+      tile.style.transform = `scale(${scale.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+      tile.style.opacity = opacity.toFixed(3);
+      tile.style.zIndex = String(Math.round((1 - norm) * 100));
+    });
+    ticking = false;
+  }
+
+  update();
+  deck.addEventListener('scroll', () => {
+    if(!ticking){
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 /* ---------- ABOUT ---------- */
@@ -124,11 +166,13 @@ function renderAbout(){
     ${topbar()}
     <div class="card-stage">
       <div class="journal-page about-page">
+        <a class="about-close" href="#/" aria-label="Close and return home">&times;</a>
         <div class="jp-kicker">About</div>
         <h2>Hi, I&rsquo;m Aysha.</h2>
         <p>I&rsquo;ve struggled with building meaningful relationships for much of my life. For a long time, I thought I was doing all the &ldquo;right&rdquo; things; I was kind and a good listener. What I couldn&rsquo;t see was how often I withdrew, expected rejection before it happened, hid behind work, or kept parts of myself hidden. Even though I longed for connection, those ways of relating kept people at a distance. It took me years to realize that if I wanted different relationships, I&rsquo;d have to practice relating differently.</p>
         <p>Most of us spend years learning how to succeed at school or work, but very few of us are taught how to build close relationships. Like any other skill, connection can be learned and practiced. It&rsquo;s built through hundreds of everyday moments where we choose curiosity over certainty, courage over protection, and practice over perfection.</p>
         <p>I hope these cards help you take small, courageous steps toward the relationships you long for.</p>
+        <p class="about-contact">Have feedback, or interested in using Practice Connection with a group? I&rsquo;d love to hear from you: <a href="mailto:hello@practiceconnectioncards.com">hello@practiceconnectioncards.com</a></p>
       </div>
     </div>
   `;
