@@ -86,22 +86,28 @@ function renderHome(){
       <p class="lede">Small experiments in relating differently.</p>
     </div>
 
-    <div class="deck" role="list" aria-label="Card categories">
-      ${order.map(key => {
-        const c = CATEGORIES[key];
-        const count = key === 'journal' ? JOURNAL_PAGES.length : CARDS[key].length;
-        return `
-        <a class="deck-tile" role="listitem" href="#/category/${key}" style="background:${c.tile}; color:${c.ink}">
-          <span class="tile-index">${count} ${key === 'journal' ? 'pages' : 'cards'}</span>
-          <span class="tile-copy">
-            <span class="tile-name">${esc(c.name)}</span>
-            <span class="tile-description">${esc(c.tagline)}</span>
-          </span>
-        </a>`;
-      }).join('')}
+    <div class="deck-wrap">
+      <div class="deck-slivers" aria-hidden="true" id="deck-slivers"></div>
+      <div class="deck" role="list" aria-label="Card categories">
+        ${order.map(key => {
+          const c = CATEGORIES[key];
+          const count = key === 'journal' ? JOURNAL_PAGES.length : CARDS[key].length;
+          return `
+          <a class="deck-tile" role="listitem" href="#/category/${key}" style="background:${c.tile}; color:${c.ink}">
+            <span class="tile-index">${count} ${key === 'journal' ? 'pages' : 'cards'}</span>
+            <span class="tile-copy">
+              <span class="tile-name">${esc(c.name)}</span>
+              <span class="tile-description">${esc(c.tagline)}</span>
+            </span>
+          </a>`;
+        }).join('')}
+      </div>
     </div>
 
-    <p class="hero-hint">Swipe to explore. Tap to select.</p>
+    <div class="deck-dots" id="deck-dots" aria-hidden="true">
+      ${order.map((_, i) => `<span class="deck-dot${i===0 ? ' is-active' : ''}"></span>`).join('')}
+    </div>
+    <p class="hero-hint">Swipe to explore &middot; Tap to select.</p>
     <div class="home-draw">
       <button type="button" class="btn-draw-small" id="draw-any-btn">Draw a card for me</button>
     </div>
@@ -118,35 +124,60 @@ function renderHome(){
   initDeckStack();
 }
 
-/* On phones, the deck is a heavily-overlapping stack (see CSS): cards sit
-   almost entirely on top of each other and you swipe through them. This
-   keeps whichever card is centered visually "on top" — scaled up, fully
-   opaque, highest z-index — while the rest recede behind it, so the stack
-   reads correctly no matter which direction you've swiped. Desktop uses a
-   separate hover-driven fan (pure CSS) and is left untouched. */
+/* On phones, only the front card is real-size; the sense of "a deck behind
+   it" comes from a handful of decorative color slivers (the next few
+   categories' colors) peeking out from behind it, offset diagonally — plus
+   dots tracking which card is active. Desktop keeps its own separate
+   hover-driven fan (pure CSS) and none of this runs there. */
 function initDeckStack(){
   const deck = document.querySelector('.deck');
   if(!deck) return;
   if(!window.matchMedia('(max-width: 760px)').matches) return;
 
   const tiles = Array.from(deck.querySelectorAll('.deck-tile'));
+  const sliverHost = document.getElementById('deck-slivers');
+  const dots = Array.from(document.querySelectorAll('.deck-dot'));
+  const tileColors = tiles.map(t => t.style.backgroundColor);
+
+  const SLIVER_COUNT = 4;
+  const slivers = [];
+  if(sliverHost){
+    for(let i = 0; i < SLIVER_COUNT; i++){
+      const el = document.createElement('div');
+      el.className = 'sliver';
+      sliverHost.appendChild(el);
+      slivers.push(el);
+    }
+  }
+
   let ticking = false;
+  let activeIndex = 0;
 
   function update(){
     const deckRect = deck.getBoundingClientRect();
     const center = deckRect.left + deckRect.width / 2;
+    let closest = 0, closestDist = Infinity;
     tiles.forEach((tile, i) => {
       const r = tile.getBoundingClientRect();
-      const tileCenter = r.left + r.width / 2;
-      const dist = Math.abs(tileCenter - center);
-      const norm = Math.min(dist / (deckRect.width / 2 || 1), 1); // 0 = centered, 1 = far
-      const scale = 1 - norm * 0.13;
-      const opacity = 1 - norm * 0.4;
-      const rot = (i % 2 === 0 ? -1 : 1) * (1.5 + norm * 3.5);
-      tile.style.transform = `scale(${scale.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
-      tile.style.opacity = opacity.toFixed(3);
-      tile.style.zIndex = String(Math.round((1 - norm) * 100));
+      const dist = Math.abs((r.left + r.width / 2) - center);
+      if(dist < closestDist){ closestDist = dist; closest = i; }
     });
+    activeIndex = closest;
+
+    dots.forEach((dot, i) => dot.classList.toggle('is-active', i === activeIndex));
+
+    slivers.forEach((sliver, i) => {
+      const targetIndex = activeIndex + 1 + i;
+      if(targetIndex < tileColors.length){
+        sliver.style.background = tileColors[targetIndex];
+        sliver.style.opacity = String(0.9 - i * 0.12);
+        sliver.style.transform = `translate(${8 + i * 9}px, ${8 + i * 7}px)`;
+        sliver.style.zIndex = String(SLIVER_COUNT - i);
+      } else {
+        sliver.style.opacity = '0';
+      }
+    });
+
     ticking = false;
   }
 

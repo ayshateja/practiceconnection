@@ -895,21 +895,50 @@ button{ font-family:inherit; }
     padding-bottom:.4rem;
   }
 
-  /* A stacked deck — cards sit almost entirely on top of each other,
-     with just enough peeking out behind to show there's more to swipe
-     through. Rotation/scale/z-index are set dynamically by JS as you
-     scroll, so whichever card is centered reads as "on top". */
-  .deck{
+  /* One nearly-full-width card at a time. Depth comes from a decorative
+     stack of color slivers sitting behind it (see .deck-slivers), not from
+     scaling or overlapping the real tiles — the front tile itself always
+     sits flat and upright, matching a real card-app reference. */
+  .deck-wrap{
+    --tile-w: min(84vw, 320px);
+    --tile-h: 300px;
+    position:relative;
+    margin:1.6rem calc(-6vw) 0;
+    padding:0 6vw;
+  }
+
+  .deck-slivers{
+    position:absolute;
+    inset:0;
     display:flex;
     align-items:center;
-    gap:0;
-    height:300px;
-    margin:1.4rem calc(-6vw) .35rem;
-    padding:1.25rem 19vw 1.6rem;
+    justify-content:center;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .deck-slivers .sliver{
+    position:absolute;
+    width:var(--tile-w);
+    height:var(--tile-h);
+    border-radius: var(--radius-tile);
+    box-shadow: var(--shadow-sm);
+    opacity:0;
+    transition: transform .22s ease, opacity .22s ease, background .22s ease;
+  }
+
+  .deck{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    height:var(--tile-h);
+    padding-inline:calc((100% - var(--tile-w)) / 2);
     overflow-x:auto;
     overflow-y:hidden;
     scroll-snap-type:x mandatory;
-    scroll-padding-inline:19vw;
+    scroll-padding-inline:calc((100% - var(--tile-w)) / 2);
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
   }
@@ -919,33 +948,50 @@ button{ font-family:inherit; }
   .deck-tile,
   .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
   .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
-    flex:0 0 min(62vw,225px);
-    width:min(62vw,225px);
-    height:270px;
-    margin-left:min(-46vw,-167px);
-    padding:1.3rem 1.15rem;
+    flex:0 0 var(--tile-w);
+    width:var(--tile-w);
+    height:var(--tile-h);
+    margin:0;
+    padding:1.5rem 1.3rem;
     scroll-snap-align:center;
-    transform-origin:center center;
-    transition:transform .2s ease, opacity .2s ease;
+    transform:none;
   }
 
-  .deck-tile:first-child{ margin-left:0; }
-
   .deck-tile .tile-name{
-    font-size:1.25rem;
+    font-size:1.4rem;
   }
 
   .deck-tile .tile-description{
-    font-size:.83rem;
-    line-height:1.4;
+    font-size:.92rem;
+    line-height:1.45;
+  }
+
+  .deck-dots{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:.4rem;
+    margin:1rem 0 0;
+  }
+
+  .deck-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background: rgba(32,36,28,0.22);
+    transition: background .2s ease, transform .2s ease;
+  }
+  .deck-dot.is-active{
+    background: var(--ink);
+    transform: scale(1.25);
   }
 
   .hero-hint{
-    margin-top:.2rem;
+    margin-top:.5rem;
   }
 
   .home-draw{
-    margin:.9rem 0 1.9rem;
+    margin:1.3rem 0 1.9rem;
   }
 
   .home-draw .btn-draw-small{
@@ -965,20 +1011,12 @@ button{ font-family:inherit; }
 }
 
 @media (max-width:420px){
-  .deck{
-    height:290px;
-    padding-inline:15vw;
-    scroll-padding-inline:15vw;
+  .deck-wrap{
+    --tile-w: 80vw;
+    --tile-h: 280px;
   }
+}
 
-  .deck-tile,
-  .deck-tile:nth-child(1), .deck-tile:nth-child(2), .deck-tile:nth-child(3),
-  .deck-tile:nth-child(4), .deck-tile:nth-child(5), .deck-tile:nth-child(6){
-    flex-basis:68vw;
-    width:68vw;
-    height:260px;
-    margin-left:-51vw;
-  }
-
-  .deck-tile:first-child{ margin-left:0; }
+@media (min-width:761px){
+  .deck-slivers, .deck-dots{ display:none; }
 }
