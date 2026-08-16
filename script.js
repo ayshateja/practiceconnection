@@ -82,10 +82,13 @@ function renderHome(){
   app.innerHTML = `
     <div class="hero home-hero">
       <h1>Practice Connection<br><em>Card Deck</em></h1>
-      <p class="lede">The ways we relate aren&rsquo;t fixed. We can practice new ways of connecting.</p>
+      <p class="lede">The ways we relate aren&rsquo;t fixed.<br>We can practice new ways of connecting.</p>
     </div>
 
-    <p class="hero-explainer">When connection feels uncertain or vulnerable, we can fall into familiar ways of protecting ourselves even when we want closeness: holding back, overthinking, overgiving or waiting for someone else to make the first move. These cards invite you to notice what you usually do, try one small shift and see what happens.</p>
+    <div class="hero-explainer-group">
+      <p class="hero-explainer">When connection feels uncertain or vulnerable, we can fall into familiar ways of protecting ourselves even when we want closeness: holding back, overthinking, overgiving or waiting for someone else to make the first move.</p>
+      <p class="hero-explainer">These cards invite you to notice what you usually do, try one small shift and see what happens.</p>
+    </div>
 
     <div class="deck" role="list" aria-label="Card categories">
       ${order.map(key => {
