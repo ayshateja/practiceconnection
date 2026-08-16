@@ -111,14 +111,6 @@ button{ font-family:inherit; }
   padding: 3.2rem 0 1rem;
 }
 
-.eyebrow{
-  font-size:.78rem;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color: var(--ink-soft);
-  margin: 0 0 .9rem;
-}
-
 .hero h1{
   font-family: var(--font-display);
   font-weight: 500;
@@ -136,18 +128,24 @@ button{ font-family:inherit; }
 .hero p.lede{
   max-width: 52ch;
   margin: 0 auto;
-  color: var(--ink-soft);
-  font-size: 1.05rem;
-  line-height:1.6;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1.18rem;
+  line-height:1.5;
 }
 
-.lede + .lede{
-  margin-top: .9rem;
+.hero-explainer{
+  max-width: 50ch;
+  margin: 1.6rem auto 2.6rem;
+  text-align:left;
+  font-size:.98rem;
+  color: var(--ink-soft);
+  line-height:1.7;
 }
 
 .safety-note{
   max-width: 46ch;
-  margin: 0 auto;
+  margin: 2rem auto 0;
   text-align:center;
   color: var(--ink-soft);
   font-size: .85rem;
@@ -730,8 +728,6 @@ button{ font-family:inherit; }
   .hero{
     padding: 1.8rem 0 .4rem;
   }
-
-  .hero .eyebrow{ display:none; }
 
   .hero h1{
     font-size: clamp(2rem, 10vw, 2.8rem);
