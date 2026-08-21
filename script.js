@@ -82,12 +82,12 @@ function renderHome(){
   app.innerHTML = `
     <div class="hero home-hero">
       <h1>Practice Connection<br><em>Card Deck</em></h1>
-      <p class="lede">The ways we relate aren&rsquo;t fixed.<br>We can practice new ways of connecting.</p>
+      <p class="lede">You can want closeness and still find yourself holding back.</p>
     </div>
 
     <div class="hero-explainer-group">
-      <p class="hero-explainer">When connection feels uncertain or vulnerable, we can fall into familiar ways of protecting ourselves, such as holding back, trying to earn our place, doubting that we&rsquo;re really wanted or waiting for someone else to make the first move.</p>
-      <p class="hero-explainer">These cards invite you to notice what you usually do, try one small shift and see what happens.</p>
+      <p class="hero-explainer">When connection feels uncertain or vulnerable, we can fall into familiar ways of protecting ourselves. We might keep our needs or feelings to ourselves, try to earn our place, or doubt that we&rsquo;re really wanted.</p>
+      <p class="hero-explainer">The ways we relate aren&rsquo;t fixed. These cards invite you to notice what you usually do, try one small shift and see what happens.</p>
     </div>
 
     <div class="deck" role="list" aria-label="Card categories">
