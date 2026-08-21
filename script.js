@@ -86,7 +86,7 @@ function renderHome(){
     </div>
 
     <div class="hero-explainer-group">
-      <p class="hero-explainer">When connection feels uncertain or vulnerable, we can fall into familiar ways of protecting ourselves even when we want closeness: holding back, overthinking, overgiving or waiting for someone else to make the first move.</p>
+      <p class="hero-explainer">When connection feels uncertain or vulnerable, we can fall into familiar ways of protecting ourselves, such as holding back, trying to earn our place, doubting that we&rsquo;re really wanted or waiting for someone else to make the first move.</p>
       <p class="hero-explainer">These cards invite you to notice what you usually do, try one small shift and see what happens.</p>
     </div>
 
