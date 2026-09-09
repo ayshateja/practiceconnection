@@ -82,7 +82,7 @@ function renderHome(){
   app.innerHTML = `
     <div class="hero home-hero">
       <h1>Practice Connection<br><em>Card Deck</em></h1>
-      <p class="lede">You can want closeness and still find yourself holding back.</p>
+      <p class="lede">36 experiments for building connection in everyday life.</p>
     </div>
 
     <div class="hero-explainer-group">
