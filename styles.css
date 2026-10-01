@@ -663,6 +663,68 @@ button{ font-family:inherit; }
   font-size:.95rem;
   color: var(--ink-soft);
 }
+
+/* Contact form: same field shell as the journal, but neutral-toned */
+#contact-form .jp-field textarea,
+#contact-form .jp-field input[type="text"],
+#contact-form .jp-field input[type="email"],
+#contact-form .jp-field select{
+  width:100%;
+  font-family: var(--font-ui);
+  font-size: .98rem;
+  line-height:1.55;
+  padding: .8rem .9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(32,36,28,0.18);
+  background: #FAFAF7;
+  color: var(--ink);
+  resize: vertical;
+  appearance: none;
+}
+#contact-form .jp-field select{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%234b5044'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .9rem center;
+  background-size: 1.1rem;
+  padding-right: 2.4rem;
+}
+#contact-form .jp-field textarea:focus,
+#contact-form .jp-field input:focus,
+#contact-form .jp-field select:focus{
+  outline: 2px solid var(--ink);
+  outline-offset:1px;
+  background-color:#fff;
+}
+
+.jp-optional{
+  font-weight:400;
+  color: var(--ink-soft);
+  font-size:.85rem;
+}
+
+.hp-field{
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  opacity:0;
+}
+
+.contact-submit{
+  margin-top:.3rem;
+}
+.contact-submit:disabled{
+  opacity:.6;
+  cursor:default;
+}
+
+.contact-status{
+  margin-top: 1rem;
+  font-size:.9rem;
+  min-height: 1.2em;
+}
+.contact-status.is-success{ color:#1a7a1a; }
+.contact-status.is-error{ color:#a03a3a; }
 .about-contact a{
   color: var(--ink-soft);
   text-decoration: underline;

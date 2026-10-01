@@ -29,6 +29,8 @@ function router(){
     renderHome();
   } else if(parts[0] === 'about'){
     renderAbout();
+  } else if(parts[0] === 'contact'){
+    renderContact();
   } else if(parts[0] === 'category' && parts[1] && CATEGORIES[parts[1]]){
     if(parts[1] === 'journal'){
       if(parts[2] !== undefined){
@@ -114,7 +116,7 @@ function renderHome(){
 
     <div class="site-footer-row">
       <a class="footer-link" href="#/about">About</a>
-      <a class="footer-link" href="mailto:hello@practiceconnectioncards.com">Contact</a>
+      <a class="footer-link" href="#/contact">Contact</a>
     </div>
   `;
 
@@ -138,6 +140,105 @@ function renderAbout(){
       </div>
     </div>
   `;
+}
+
+/* ---------- CONTACT ---------- */
+
+const WEB3FORMS_ACCESS_KEY = '6ec9426a-b275-4238-a0d4-39d7c361ca0a';
+
+function renderContact(){
+  app.innerHTML = `
+    ${topbar()}
+    <div class="card-stage">
+      <div class="journal-page about-page">
+        <a class="about-close" href="#/" aria-label="Close and return home">&times;</a>
+        <div class="jp-kicker">Groups &amp; Practitioners</div>
+        <h2>Bring Practice Connection to your group or practice.</h2>
+        <p>Physical card decks and a facilitator guide are available to support your groups or clients. Tell me a bit about what you're looking for and I'll follow up.</p>
+
+        <form id="contact-form" novalidate>
+          <input type="hidden" name="access_key" value="${WEB3FORMS_ACCESS_KEY}">
+          <input type="hidden" name="subject" value="New inquiry from practiceconnectioncards.com">
+          <input type="hidden" name="from_name" value="Practice Connection website">
+          <input type="text" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <div class="jp-field">
+            <label for="contact-name">Name</label>
+            <input type="text" id="contact-name" name="name" required>
+          </div>
+          <div class="jp-field">
+            <label for="contact-email">Email</label>
+            <input type="email" id="contact-email" name="email" required>
+          </div>
+          <div class="jp-field">
+            <label for="contact-org">Organization / practice <span class="jp-optional">(optional)</span></label>
+            <input type="text" id="contact-org" name="organization">
+          </div>
+          <div class="jp-field">
+            <label for="contact-reason">I'm reaching out about</label>
+            <select id="contact-reason" name="reason">
+              <option>Physical decks</option>
+              <option>Facilitator guide</option>
+              <option>Using Practice Connection with my group or clients</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="jp-field">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" name="message" rows="5" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-draw-small contact-submit" id="contact-submit">Send</button>
+        </form>
+        <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+
+        <p class="about-contact">Prefer email? Reach me directly at <a href="mailto:hello@practiceconnectioncards.com">hello@practiceconnectioncards.com</a></p>
+      </div>
+    </div>
+  `;
+
+  const form = document.getElementById('contact-form');
+  const statusEl = document.getElementById('contact-status');
+  const submitBtn = document.getElementById('contact-submit');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if(WEB3FORMS_ACCESS_KEY === 'REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY'){
+      statusEl.textContent = 'Form isn\u2019t connected yet \u2014 add a Web3Forms access key in script.js.';
+      statusEl.className = 'contact-status is-error';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending\u2026';
+    statusEl.textContent = '';
+    statusEl.className = 'contact-status';
+
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    try{
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if(result.success){
+        form.reset();
+        form.style.display = 'none';
+        statusEl.textContent = 'Thanks \u2014 I\u2019ll be in touch soon.';
+        statusEl.className = 'contact-status is-success';
+      } else {
+        throw new Error(result.message || 'Submission failed');
+      }
+    } catch(err){
+      statusEl.textContent = 'Something went wrong sending that. Try again, or email hello@practiceconnectioncards.com directly.';
+      statusEl.className = 'contact-status is-error';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send';
+    }
+  });
 }
 
 /* ---------- TABLE OF CONTENTS ---------- */
