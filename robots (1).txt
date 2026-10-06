@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /journal.pdf
+Disallow: /FG.pdf
